@@ -7,5 +7,5 @@ interface Decoder
      * @param string $data
      * @return string
      */
-    public function encode(string $data): string;
+    public function decode(string $data): string;
 }

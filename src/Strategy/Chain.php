@@ -24,6 +24,7 @@ class Chain implements \Codeup\Encoding\Strategy
     /**
      * @param string $data
      * @return string
+     * @throws \InvalidArgumentException if the passed data can not be decoded
      */
     public function decode(string $data): string
     {
