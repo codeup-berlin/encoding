@@ -1,0 +1,16 @@
+{
+  "name": "codeup/encoding",
+  "type": "library",
+  "description": "collection of encoding schemes in order to encode and decode based on different strategies",
+  "homepage": "https://github.com/codeup-berlin/encoding",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Codeup\\Encoding\\": "src"
+    }
+  },
+  "require-dev": {
+    "php": "^7.0",
+    "phpunit/phpunit": "^5.7"
+  }
+}
