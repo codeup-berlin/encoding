@@ -4,7 +4,7 @@ namespace Codeup\Encoding\Strategy;
 class Chain implements \Codeup\Encoding\Strategy
 {
     /**
-     * @var \Codeup\Encoding\Strategy[]
+     * @var [\Codeup\Encoding\Strategy, bool][]
      */
     private $strategies = [];
 
@@ -15,8 +15,9 @@ class Chain implements \Codeup\Encoding\Strategy
     public function encode(string $data): string
     {
         /** @var \Codeup\Encoding\Strategy $strategy */
-        foreach ($this->strategies as $strategy) {
-            $data = $strategy->encode($data);
+        /** @var bool $inverted */
+        foreach ($this->strategies as list($strategy, $inverted)) {
+            $data = $inverted ? $strategy->decode($data) : $strategy->encode($data);
         }
         return $data;
     }
@@ -29,8 +30,9 @@ class Chain implements \Codeup\Encoding\Strategy
     public function decode(string $data): string
     {
         /** @var \Codeup\Encoding\Strategy $strategy */
-        foreach (array_reverse($this->strategies) as $strategy) {
-            $data = $strategy->decode($data);
+        /** @var bool $inverted */
+        foreach (array_reverse($this->strategies) as list($strategy, $inverted)) {
+            $data = $inverted ? $strategy->encode($data) : $strategy->decode($data);
         }
         return $data;
     }
@@ -41,7 +43,20 @@ class Chain implements \Codeup\Encoding\Strategy
      */
     public function append(\Codeup\Encoding\Strategy $strategy)
     {
-        $this->strategies[] = $strategy;
+        $this->strategies[] = [$strategy, false];
+        return $this;
+    }
+
+    /**
+     * Inverted encoders behave the opposite as the chain.
+     * In case the chain is encoded, the inverted encoder will decode and vice versa.
+     *
+     * @param \Codeup\Encoding\Strategy $strategy
+     * @return Chain
+     */
+    public function appendInverted(\Codeup\Encoding\Strategy $strategy)
+    {
+        $this->strategies[] = [$strategy, true];
         return $this;
     }
 }

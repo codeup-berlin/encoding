@@ -1,7 +1,7 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class AESGCMTest extends \PHPUnit_Framework_TestCase
+class AESGCMTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @test
