@@ -8,23 +8,43 @@ use PHPUnit\Framework\TestCase;
 class HexTest extends TestCase
 {
     /**
-     * @test
+     * @return string[][]
      */
-    public function encode_validString()
+    public function provideValidCases(): array
     {
-        $classUnderTest = new Hex();
-        $result = $classUnderTest->encode('bla');
-        $this->assertSame('626c61', $result);
+        return [
+            'small value' => ['bla', '626c61'],
+            'stripped uuid' => [
+                base64_decode('FhaTlMrtSXipMAi6M3vU3w'),
+                '16169394caed4978a93008ba337bd4df'
+            ],
+        ];
     }
 
     /**
      * @test
+     * @dataProvider provideValidCases
+     * @param string $plainValue
+     * @param string $encodedValue
      */
-    public function decode_validString()
+    public function encode_validString(string $plainValue, string $encodedValue)
     {
         $classUnderTest = new Hex();
-        $result = $classUnderTest->decode('626c61');
-        $this->assertSame('bla', $result);
+        $result = $classUnderTest->encode($plainValue);
+        $this->assertSame($encodedValue, $result);
+    }
+
+    /**
+     * @test
+     * @dataProvider provideValidCases
+     * @param string $plainValue
+     * @param string $encodedValue
+     */
+    public function decode_validString(string $plainValue, string $encodedValue)
+    {
+        $classUnderTest = new Hex();
+        $result = $classUnderTest->decode($encodedValue);
+        $this->assertSame($plainValue, $result);
     }
 
     /**
