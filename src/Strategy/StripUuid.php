@@ -1,7 +1,10 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class StripUuid implements \Codeup\Encoding\Strategy
+use Codeup\Encoding\Strategy as EncodingStrategy;
+use InvalidArgumentException;
+
+class StripUuid implements EncodingStrategy
 {
     /**
      * @param string $data
@@ -9,8 +12,8 @@ class StripUuid implements \Codeup\Encoding\Strategy
      */
     public function encode(string $data): string
     {
-        if (!preg_match('/^[a-f0-9]{8}\-([a-f0-9]{4}\-){3}[a-f0-9]{12}$/', $data)) {
-            throw new \InvalidArgumentException('Not a valid uuid: ' . $data);
+        if (!preg_match('/^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$/', $data)) {
+            throw new InvalidArgumentException('Not a valid uuid: ' . $data);
         }
         return str_replace('-', '', $data);
     }
@@ -23,7 +26,7 @@ class StripUuid implements \Codeup\Encoding\Strategy
     public function decode(string $data): string
     {
         if (!preg_match('/^[a-f0-9]{32}$/', $data)) {
-            throw new \InvalidArgumentException('Not a stripped uuid: ' . $data);
+            throw new InvalidArgumentException('Not a stripped uuid: ' . $data);
         }
         return implode('-', [
             substr($data, 0, 8),

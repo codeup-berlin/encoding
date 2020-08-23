@@ -1,7 +1,9 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class Base64Url implements \Codeup\Encoding\Strategy
+use Codeup\Encoding\Strategy as EncodingStrategy;
+
+class Base64Url implements EncodingStrategy
 {
     /**
      * @param string $data

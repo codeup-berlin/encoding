@@ -2,7 +2,10 @@
 
 namespace Codeup\Encoding\Strategy;
 
-class HexTest extends \PHPUnit\Framework\TestCase
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
+class HexTest extends TestCase
 {
     /**
      * @test
@@ -26,10 +29,10 @@ class HexTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function decode_invalidString()
     {
+        $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new Hex();
         @$classUnderTest->decode('626c6');
     }

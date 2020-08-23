@@ -1,7 +1,9 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class Base64UrlTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class Base64UrlTest extends TestCase
 {
     /**
      * @test

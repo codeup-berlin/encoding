@@ -1,7 +1,10 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class ChainTest extends \PHPUnit\Framework\TestCase
+use Codeup\Encoding\Strategy as EncodingStrategy;
+use PHPUnit\Framework\TestCase;
+
+class ChainTest extends TestCase
 {
     /**
      * @test
@@ -44,12 +47,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
         $plainData = uniqid('data');
         $encoded1Data = uniqid('data');
         $encoded2Data = uniqid('data');
-        $strategy1Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy1Mock = $this->createMock(EncodingStrategy::class);
         $strategy1Mock->expects($this->once())
             ->method('encode')
             ->with($plainData)
             ->willReturn($encoded1Data);
-        $strategy2Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy2Mock = $this->createMock(EncodingStrategy::class);
         $strategy2Mock->expects($this->once())
             ->method('encode')
             ->with($encoded1Data)
@@ -77,12 +80,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
         $plainData = uniqid('data');
         $encoded1Data = uniqid('data');
         $encoded2Data = uniqid('data');
-        $strategy1Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy1Mock = $this->createMock(EncodingStrategy::class);
         $strategy1Mock->expects($this->once())
             ->method('decode')
             ->with($encoded1Data)
             ->willReturn($plainData);
-        $strategy2Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy2Mock = $this->createMock(EncodingStrategy::class);
         $strategy2Mock->expects($this->once())
             ->method('decode')
             ->with($encoded2Data)
@@ -110,12 +113,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
         $plainData = uniqid('data');
         $encoded1Data = uniqid('data');
         $encoded2Data = uniqid('data');
-        $strategy1Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy1Mock = $this->createMock(EncodingStrategy::class);
         $strategy1Mock->expects($this->once())
             ->method('decode')
             ->with($plainData)
             ->willReturn($encoded1Data);
-        $strategy2Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy2Mock = $this->createMock(EncodingStrategy::class);
         $strategy2Mock->expects($this->once())
             ->method('encode')
             ->with($encoded1Data)
@@ -143,12 +146,12 @@ class ChainTest extends \PHPUnit\Framework\TestCase
         $plainData = uniqid('data');
         $encoded1Data = uniqid('data');
         $encoded2Data = uniqid('data');
-        $strategy1Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy1Mock = $this->createMock(EncodingStrategy::class);
         $strategy1Mock->expects($this->once())
             ->method('encode')
             ->with($encoded1Data)
             ->willReturn($plainData);
-        $strategy2Mock = $this->createMock(\Codeup\Encoding\Strategy::class);
+        $strategy2Mock = $this->createMock(EncodingStrategy::class);
         $strategy2Mock->expects($this->once())
             ->method('decode')
             ->with($encoded2Data)

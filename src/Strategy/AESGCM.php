@@ -1,7 +1,11 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class AESGCM implements \Codeup\Encoding\Strategy
+use Codeup\Encoding\Strategy as EncodingStrategy;
+use Exception;
+use InvalidArgumentException;
+
+class AESGCM implements EncodingStrategy
 {
     /**
      * @var string
@@ -41,8 +45,8 @@ class AESGCM implements \Codeup\Encoding\Strategy
     {
         try {
             return \AESGCM\AESGCM::decryptWithAppendedTag($this->key, $this->iv, $data);
-        } catch (\Exception $e) {
-            throw new \InvalidArgumentException('Decryption failed.', 0, $e);
+        } catch (Exception $e) {
+            throw new InvalidArgumentException('Decryption failed.', 0, $e);
         }
     }
 }

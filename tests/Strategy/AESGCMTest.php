@@ -1,7 +1,10 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class AESGCMTest extends \PHPUnit\Framework\TestCase
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
+class AESGCMTest extends TestCase
 {
     /**
      * @test
@@ -21,11 +24,11 @@ class AESGCMTest extends \PHPUnit\Framework\TestCase
     }
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function integration_decryptInvalidData()
     {
         // prepare
+        $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new AESGCM(uniqid('key'), uniqid('iv'));
 
         // test

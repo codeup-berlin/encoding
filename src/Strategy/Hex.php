@@ -1,7 +1,10 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class Hex implements \Codeup\Encoding\Strategy
+use Codeup\Encoding\Strategy as EncodingStrategy;
+use InvalidArgumentException;
+
+class Hex implements EncodingStrategy
 {
     /**
      * @param string $data
@@ -21,7 +24,7 @@ class Hex implements \Codeup\Encoding\Strategy
     {
         $result = hex2bin($data);
         if (false === $result) {
-            throw new \InvalidArgumentException('Invalid hex string.');
+            throw new InvalidArgumentException('Invalid hex string.');
         }
         return $result;
     }

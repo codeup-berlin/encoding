@@ -2,7 +2,10 @@
 
 namespace Codeup\Encoding\Strategy;
 
-class StripUuidTest extends \PHPUnit\Framework\TestCase
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
+
+class StripUuidTest extends TestCase
 {
     /**
      * @test
@@ -31,10 +34,11 @@ class StripUuidTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @dataProvider provideNonUuidValues
-     * @expectedException \InvalidArgumentException
+     * @param $value
      */
     public function encode_nonUuid($value)
     {
+        $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new StripUuid();
         $classUnderTest->encode($value);
     }
@@ -66,10 +70,11 @@ class StripUuidTest extends \PHPUnit\Framework\TestCase
     /**
      * @test
      * @dataProvider provideNonStrippedUuidValues
-     * @expectedException \InvalidArgumentException
+     * @param $value
      */
     public function decode_nonUuid($value)
     {
+        $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new StripUuid();
         $classUnderTest->decode($value);
     }

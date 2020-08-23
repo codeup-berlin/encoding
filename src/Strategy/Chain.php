@@ -1,7 +1,9 @@
 <?php
 namespace Codeup\Encoding\Strategy;
 
-class Chain implements \Codeup\Encoding\Strategy
+use Codeup\Encoding\Strategy as EncodingStrategy;
+
+class Chain implements EncodingStrategy
 {
     /**
      * @var [\Codeup\Encoding\Strategy, bool][]
@@ -41,7 +43,7 @@ class Chain implements \Codeup\Encoding\Strategy
      * @param \Codeup\Encoding\Strategy $strategy
      * @return Chain
      */
-    public function append(\Codeup\Encoding\Strategy $strategy)
+    public function append(EncodingStrategy $strategy)
     {
         $this->strategies[] = [$strategy, false];
         return $this;
@@ -54,7 +56,7 @@ class Chain implements \Codeup\Encoding\Strategy
      * @param \Codeup\Encoding\Strategy $strategy
      * @return Chain
      */
-    public function appendInverted(\Codeup\Encoding\Strategy $strategy)
+    public function appendInverted(EncodingStrategy $strategy)
     {
         $this->strategies[] = [$strategy, true];
         return $this;
