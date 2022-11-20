@@ -33,7 +33,7 @@ class AESGCM implements EncodingStrategy
      */
     public function encode(string $data): string
     {
-        return \AESGCM\AESGCM::encryptAndAppendTag($this->key, $this->iv, $data);
+        return \AESGCM\AESGCM::encryptAndAppendTag($this->key, $this->iv, $data, '');
     }
 
     /**
@@ -44,7 +44,7 @@ class AESGCM implements EncodingStrategy
     public function decode(string $data): string
     {
         try {
-            return \AESGCM\AESGCM::decryptWithAppendedTag($this->key, $this->iv, $data);
+            return \AESGCM\AESGCM::decryptWithAppendedTag($this->key, $this->iv, $data, '');
         } catch (Exception $e) {
             throw new InvalidArgumentException('Decryption failed.', 0, $e);
         }
