@@ -7,14 +7,14 @@ namespace Codeup\Encoding\Strategy;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class CompactUuidTest extends TestCase
+class Compact64UuidTest extends TestCase
 {
     /**
      * @test
      */
     public function encode_uuid()
     {
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $result = $classUnderTest->encode('364f1e0d-a2ca-4e83-8139-26b058df27fe');
         $this->assertSame('Nk8eDaLKToOBOSawWN8n_g', $result);
     }
@@ -41,7 +41,7 @@ class CompactUuidTest extends TestCase
     public function encode_nonUuid(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $classUnderTest->encode($value);
     }
 
@@ -50,7 +50,7 @@ class CompactUuidTest extends TestCase
      */
     public function decode_strippedUuid()
     {
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $result = $classUnderTest->decode('Nk8eDaLKToOBOSawWN8n_g');
         $this->assertSame('364f1e0d-a2ca-4e83-8139-26b058df27fe', $result);
     }
@@ -77,7 +77,7 @@ class CompactUuidTest extends TestCase
     public function decode_nonUuid(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $classUnderTest->decode($value);
     }
 
@@ -86,7 +86,7 @@ class CompactUuidTest extends TestCase
      */
     public function encodeDecode_uuidWithLeadingZero()
     {
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $uuid = '004f1e0d-a2ca-4e83-8139-26b058df27f0';
         $encoded = $classUnderTest->encode($uuid);
         $decoded = $classUnderTest->decode($encoded);
@@ -99,7 +99,7 @@ class CompactUuidTest extends TestCase
      */
     public function encodeDecode_niUuuid()
     {
-        $classUnderTest = CompactUuid::makeDefault();
+        $classUnderTest = Compact64Uuid::makeDefault();
         $uuid = '00000000-0000-0000-0000-000000000000';
         $encoded = $classUnderTest->encode($uuid);
         $decoded = $classUnderTest->decode($encoded);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding\Strategy;
 
-class CompactUuid extends Chain
+class Compact64Uuid extends Chain
 {
     /**
      * @param StripUuid $stripUuid
@@ -19,9 +19,9 @@ class CompactUuid extends Chain
     }
 
     /**
-     * @return CompactUuid
+     * @return Compact64Uuid
      */
-    public static function makeDefault(): CompactUuid
+    public static function makeDefault(): Compact64Uuid
     {
         return new self(new StripUuid(), new Hex(), new Base64Url());
     }
