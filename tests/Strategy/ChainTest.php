@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Codeup\Encoding\Strategy;
 
 use Codeup\Encoding\Strategy as EncodingStrategy;
@@ -58,8 +61,8 @@ class ChainTest extends TestCase
             ->with($encoded1Data)
             ->willReturn($encoded2Data);
         $classUnderTest = new Chain();
-        /** @var \Codeup\Encoding\Strategy $strategy1Mock */
-        /** @var \Codeup\Encoding\Strategy $strategy2Mock */
+        /** @var EncodingStrategy $strategy1Mock */
+        /** @var EncodingStrategy $strategy2Mock */
         $classUnderTest
             ->append($strategy1Mock)
             ->append($strategy2Mock);
@@ -91,8 +94,8 @@ class ChainTest extends TestCase
             ->with($encoded2Data)
             ->willReturn($encoded1Data);
         $classUnderTest = new Chain();
-        /** @var \Codeup\Encoding\Strategy $strategy1Mock */
-        /** @var \Codeup\Encoding\Strategy $strategy2Mock */
+        /** @var EncodingStrategy $strategy1Mock */
+        /** @var EncodingStrategy $strategy2Mock */
         $classUnderTest
             ->append($strategy1Mock)
             ->append($strategy2Mock);
@@ -124,8 +127,8 @@ class ChainTest extends TestCase
             ->with($encoded1Data)
             ->willReturn($encoded2Data);
         $classUnderTest = new Chain();
-        /** @var \Codeup\Encoding\Strategy $strategy1Mock */
-        /** @var \Codeup\Encoding\Strategy $strategy2Mock */
+        /** @var EncodingStrategy $strategy1Mock */
+        /** @var EncodingStrategy $strategy2Mock */
         $classUnderTest
             ->appendInverted($strategy1Mock)
             ->append($strategy2Mock);
@@ -157,8 +160,8 @@ class ChainTest extends TestCase
             ->with($encoded2Data)
             ->willReturn($encoded1Data);
         $classUnderTest = new Chain();
-        /** @var \Codeup\Encoding\Strategy $strategy1Mock */
-        /** @var \Codeup\Encoding\Strategy $strategy2Mock */
+        /** @var EncodingStrategy $strategy1Mock */
+        /** @var EncodingStrategy $strategy2Mock */
         $classUnderTest
             ->appendInverted($strategy1Mock)
             ->append($strategy2Mock);

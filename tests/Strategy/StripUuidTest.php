@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeup\Encoding\Strategy;
 
 use InvalidArgumentException;
@@ -20,13 +22,13 @@ class StripUuidTest extends TestCase
     /**
      * @return array
      */
-    public function provideNonUuidValues()
+    public function provideNonUuidValues(): array
     {
         return [
             'missing char' => ['364f1e0d-a2ca-4e83-8139-26b058df27f'],
             'stripped uuid' => ['364f1e0da2ca4e83813926b058df27fe'],
             'invalid char' => ['364f1e0d-a2ca-4e83-8139-26b058df27g'],
-            'number' => [234],
+            'number' => ['234'],
             'random' => [uniqid()],
         ];
     }
@@ -34,9 +36,9 @@ class StripUuidTest extends TestCase
     /**
      * @test
      * @dataProvider provideNonUuidValues
-     * @param $value
+     * @param string $value
      */
-    public function encode_nonUuid($value)
+    public function encode_nonUuid(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new StripUuid();
@@ -62,7 +64,7 @@ class StripUuidTest extends TestCase
             'missing char' => ['364f1e0d-a2ca-4e83-8139-26b058df27f'],
             'unstripped uuid' => ['364f1e0d-a2ca-4e83-8139-26b058df27fe'],
             'invalid char' => ['364f1e0da2ca4e83813926b058df27g'],
-            'number' => [234],
+            'number' => ['234'],
             'random' => [uniqid()],
         ];
     }
@@ -70,9 +72,9 @@ class StripUuidTest extends TestCase
     /**
      * @test
      * @dataProvider provideNonStrippedUuidValues
-     * @param $value
+     * @param string $value
      */
-    public function decode_nonUuid($value)
+    public function decode_nonUuid(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new StripUuid();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeup\Encoding\Strategy;
 
 use Codeup\Encoding\Strategy as EncodingStrategy;
@@ -10,17 +12,21 @@ use Codeup\Encoding\Strategy as EncodingStrategy;
 class BaseConv implements EncodingStrategy
 {
     const BASE_HEX = '0123456789abcdef';
-    const BASE_DEC = '0123456789';
+
+    /**
+     * @var array<string, Decimal>
+     */
+    private static array $decimalEncoder = [];
+
+        /**
+     * @var string|null
+     */
+    private ?string $sourceDictionary;
 
     /**
      * @var string|null
      */
-    private $fromBase;
-
-    /**
-     * @var string|null
-     */
-    private $toBase;
+    private ?string $targetDictionary;
 
     /**
      * @param string|null $fromBase
@@ -28,83 +34,27 @@ class BaseConv implements EncodingStrategy
      */
     public function __construct(string $fromBase = null, string $toBase = null)
     {
-        $this->fromBase = $fromBase;
-        $this->toBase = $toBase;
-    }
-
-    /**
-     * @param string $base
-     * @return bool
-     */
-    private function isHexBase(string $base): bool
-    {
-        return strtolower($base) === self::BASE_HEX;
-    }
-
-    /**
-     * @param string $base
-     * @return bool
-     */
-    private function isDecBase(string $base): bool
-    {
-        return $base === self::BASE_DEC;
-    }
-
-    /**
-     * @param string $value
-     * @param string $base
-     * @return string
-     */
-    private function dec(string $value, string $base): string
-    {
-        if ($this->isDecBase($base)) {
-            return $value;
+        $this->sourceDictionary = $fromBase;
+        $this->targetDictionary = $toBase;
+        if (null !== $this->sourceDictionary && !isset(self::$decimalEncoder[$this->sourceDictionary])) {
+            self::$decimalEncoder[$this->sourceDictionary] = new Decimal($this->sourceDictionary);
         }
-        $baseChars = str_split($base, 1);
-        $baseLen = count($baseChars);
-        $valueChars = str_split($value, 1);
-        $valueLength = count($valueChars);
-        $result = '0';
-        for ($i = 1; $i <= $valueLength; $i++) {
-            $result = bcadd(
-                $result,
-                bcmul(
-                    array_search($valueChars[$i - 1], $baseChars),
-                    bcpow($baseLen, $valueLength - $i)
-                )
-            );
+        if (null !== $this->targetDictionary && !isset(self::$decimalEncoder[$this->targetDictionary])) {
+            self::$decimalEncoder[$this->targetDictionary] = new Decimal($this->targetDictionary);
         }
-        return $result;
     }
 
     /**
      * @see https://www.php.net/manual/en/function.base-convert.php
      * @param string $value
-     * @param string $fromBase
-     * @param string $toBase
+     * @param string $fromDictionary
+     * @param string $toDictionary
      * @return string
      */
-    private function convBase(string $value, string $fromBase, string $toBase): string
+    private function convBase(string $value, string $fromDictionary, string $toDictionary): string
     {
-        if ('' === $value || $fromBase === $toBase) {
-            return $value;
-        }
-        $toBaseChars = str_split($toBase, 1);;
-        $toBaseLen = count($toBaseChars);
-        $decValue = $this->dec($value, $fromBase);
-        if ($decValue < $toBaseLen) {
-            return $toBaseChars[$decValue];
-        }
-        $result = '';
-        while ($decValue !== '0') {
-            $result = $toBaseChars[bcmod($decValue, $toBaseLen)] . $result;
-            $decValue = bcdiv($decValue, $toBaseLen, 0);
-        }
-        // fix hex leading zero
-        if ($this->isHexBase($toBase) && strlen($result) % 2) {
-            $result = '0' . $result;
-        }
-        return $result;
+        $decimalValue = self::$decimalEncoder[$fromDictionary]->encode($value);
+        return self::$decimalEncoder[$toDictionary]->decode($decimalValue);
     }
 
     /**
@@ -134,7 +84,7 @@ class BaseConv implements EncodingStrategy
      */
     public function encode(string $data): string
     {
-        return $this->encodeNormalized($data, $this->fromBase, $this->toBase);
+        return $this->encodeNormalized($data, $this->sourceDictionary, $this->targetDictionary);
     }
 
     /**
@@ -143,6 +93,6 @@ class BaseConv implements EncodingStrategy
      */
     public function decode(string $data): string
     {
-        return $this->encodeNormalized($data, $this->toBase, $this->fromBase);
+        return $this->encodeNormalized($data, $this->targetDictionary, $this->sourceDictionary);
     }
 }

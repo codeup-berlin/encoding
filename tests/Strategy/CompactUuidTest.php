@@ -80,4 +80,30 @@ class CompactUuidTest extends TestCase
         $classUnderTest = CompactUuid::makeDefault();
         $classUnderTest->decode($value);
     }
+
+    /**
+     * @test
+     */
+    public function encodeDecode_uuidWithLeadingZero()
+    {
+        $classUnderTest = CompactUuid::makeDefault();
+        $uuid = '004f1e0d-a2ca-4e83-8139-26b058df27f0';
+        $encoded = $classUnderTest->encode($uuid);
+        $decoded = $classUnderTest->decode($encoded);
+        $this->assertSame('AE8eDaLKToOBOSawWN8n8A', $encoded);
+        $this->assertSame($uuid, $decoded);
+    }
+
+    /**
+     * @test
+     */
+    public function encodeDecode_niUuuid()
+    {
+        $classUnderTest = CompactUuid::makeDefault();
+        $uuid = '00000000-0000-0000-0000-000000000000';
+        $encoded = $classUnderTest->encode($uuid);
+        $decoded = $classUnderTest->decode($encoded);
+        $this->assertSame('AAAAAAAAAAAAAAAAAAAAAA', $encoded);
+        $this->assertSame($uuid, $decoded);
+    }
 }

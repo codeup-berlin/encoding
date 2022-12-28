@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Codeup\Encoding\Strategy;
 
 use Codeup\Encoding\Strategy as EncodingStrategy;
@@ -10,12 +13,12 @@ class AESGCM implements EncodingStrategy
     /**
      * @var string
      */
-    private $key;
+    private string $key;
 
     /**
      * @var string
      */
-    private $iv;
+    private string $iv;
 
     /**
      * @param string $key
@@ -39,7 +42,7 @@ class AESGCM implements EncodingStrategy
     /**
      * @param string $data
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function decode(string $data): string
     {

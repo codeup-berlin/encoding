@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Codeup\Encoding\Strategy;
 
 use Codeup\Encoding\Strategy as EncodingStrategy;
@@ -21,7 +24,7 @@ class StripUuid implements EncodingStrategy
     /**
      * @param string $data
      * @return string
-     * @throws \InvalidArgumentException if the passed data can not be decoded
+     * @throws InvalidArgumentException if the passed data can not be decoded
      */
     public function decode(string $data): string
     {

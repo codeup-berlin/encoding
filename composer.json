@@ -15,8 +15,9 @@
     }
   },
   "require": {
-    "php": "^7.2 | ^8.0",
+    "php": "^8.1",
     "ext-bcmath": "*",
+    "ext-sodium": "*",
     "spomky-labs/php-aes-gcm": "^1.2"
   },
   "require-dev": {
