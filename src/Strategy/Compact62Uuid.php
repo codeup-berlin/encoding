@@ -8,9 +8,6 @@ use Codeup\Encoding\Strategy as EncodingStrategy;
 
 class Compact62Uuid extends Chain
 {
-    const BASE_HEX = '0123456789abcdef';
-    const BASE_62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
     /**
      * @param StripUuid $stripUuid
      * @param Base64Url $base62Url

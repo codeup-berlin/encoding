@@ -11,8 +11,6 @@ use Codeup\Encoding\Strategy as EncodingStrategy;
  */
 class BaseConv implements EncodingStrategy
 {
-    const BASE_HEX = '0123456789abcdef';
-
     /**
      * @var array<string, Decimal>
      */

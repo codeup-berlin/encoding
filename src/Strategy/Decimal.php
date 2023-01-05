@@ -9,9 +9,6 @@ use InvalidArgumentException;
 
 class Decimal implements EncodingStrategy
 {
-    const BASE_HEX = '0123456789abcdef';
-    const BASE_DEC = '0123456789';
-
     /**
      * @param string|null $sourceDictionary
      */
