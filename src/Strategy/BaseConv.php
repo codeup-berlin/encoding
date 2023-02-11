@@ -30,7 +30,7 @@ class BaseConv implements EncodingStrategy
      * @param string|null $fromBase
      * @param string|null $toBase
      */
-    public function __construct(string $fromBase = null, string $toBase = null)
+    public function __construct(?string $fromBase = null, ?string $toBase = null)
     {
         $this->sourceDictionary = $fromBase;
         $this->targetDictionary = $toBase;
@@ -39,6 +39,11 @@ class BaseConv implements EncodingStrategy
         }
         if (null !== $this->targetDictionary && !isset(self::$decimalEncoder[$this->targetDictionary])) {
             self::$decimalEncoder[$this->targetDictionary] = new Decimal($this->targetDictionary);
+        }
+        if ((null === $this->sourceDictionary || null === $this->targetDictionary) &&
+            !isset(self::$decimalEncoder[self::BASE_HEX])
+        ) {
+            self::$decimalEncoder[self::BASE_HEX] = new Decimal(self::BASE_HEX);
         }
     }
 

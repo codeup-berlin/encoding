@@ -14,6 +14,18 @@ class BaseConvTest extends TestCase
     public function provideValidCases(): array
     {
         return [
+            'from binary to binary' => [
+                hex2bin('580a7aa5d6610ac3'), null, null,
+                hex2bin('580a7aa5d6610ac3')
+            ],
+            'from binary to hexadecimal (base16)' => [
+                hex2bin('580a7aa5d6610ac3'), null, '0123456789abcdef',
+                '580a7aa5d6610ac3'
+            ],
+            'from binary to password dictionary' => [
+                hex2bin('580a7aa5d6610ac3'), null, '0123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!^"§$%&/()=?*\'_:;,.-#+',
+                'VeUqZ;+a.J'
+            ],
             'from decimal (base10) to octal (base8)' => [
                 '123', '0123456789', '01234567',
                 '173'
