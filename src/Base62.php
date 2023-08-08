@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding;
 
+use Codeup\Encoding\Codec\Chain\UuidToBase62;
 use Codeup\Encoding\Codec\IntegerToBase62;
 use Codeup\Encoding\Codec\StringToBase62;
 
@@ -56,6 +57,22 @@ class Base62
     public static function getIntegerDecoder(): Decoder
     {
         return self::makeOrGetInstance(IntegerToBase62::class);
+    }
+
+    /**
+     * @return Encoder
+     */
+    public static function getUuidEncoder(): Encoder
+    {
+        return self::makeOrGetInstance(UuidToBase62::class);
+    }
+
+    /**
+     * @return Decoder
+     */
+    public static function getUuidDecoder(): Decoder
+    {
+        return self::makeOrGetInstance(UuidToBase62::class);
     }
 
     /**

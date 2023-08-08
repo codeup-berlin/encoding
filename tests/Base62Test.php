@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding;
 
+use Codeup\Encoding\Codec\Chain\UuidToBase62;
 use Codeup\Encoding\Codec\IntegerToBase62;
 use Codeup\Encoding\Codec\StringToBase62;
 use PHPUnit\Framework\TestCase;
@@ -64,6 +65,34 @@ class Base62Test extends TestCase
         // verify
         $this->assertInstanceOf(IntegerToBase62::class, $decoder);
         $this->assertSame('1000', $decoded);
+    }
+
+    /**
+     * @test
+     */
+    public function getUuidEncoder_encodeValidUuid()
+    {
+        // test
+        $encoder = Base62::getUuidEncoder();
+        $encoded = $encoder->encode('21569827-e5d1-4fcc-8374-fd7950553eed');
+
+        // verify
+        $this->assertInstanceOf(UuidToBase62::class, $encoder);
+        $this->assertSame('10uJs5dWKec9MulCf2wXa1', $encoded);
+    }
+
+    /**
+     * @test
+     */
+    public function getUuidDecoder_decompactValidUuid()
+    {
+        // test
+        $decoder = Base62::getUuidDecoder();
+        $decoded = $decoder->decode('10uJs5dWKec9MulCf2wXa1');
+
+        // verify
+        $this->assertInstanceOf(UuidToBase62::class, $decoder);
+        $this->assertSame('21569827-e5d1-4fcc-8374-fd7950553eed', $decoded);
     }
 
     /**
