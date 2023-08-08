@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Codec;
 use InvalidArgumentException;
 
-class StripUuid implements EncodingStrategy
+class StripUuid implements Codec
 {
     /**
      * @param string $data
@@ -28,6 +28,7 @@ class StripUuid implements EncodingStrategy
      */
     public function decode(string $data): string
     {
+        $data = str_pad($data, 32, '0', STR_PAD_LEFT);
         if (!preg_match('/^[a-f0-9]{32}$/', $data)) {
             throw new InvalidArgumentException('Not a stripped uuid: ' . $data);
         }

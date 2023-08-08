@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Codec;
 use InvalidArgumentException;
 
-class Hex implements EncodingStrategy
+class BinToHex implements Codec
 {
     /**
      * @param string $data

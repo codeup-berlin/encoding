@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Codec;
 use InvalidArgumentException;
 
-class Chain implements EncodingStrategy
+class Chain implements Codec
 {
     /**
-     * @var array<EncodingStrategy, bool>
+     * @var array<Codec, bool>
      */
     private array $strategies = [];
 
@@ -20,9 +20,9 @@ class Chain implements EncodingStrategy
      */
     public function encode(string $data): string
     {
-        /** @var EncodingStrategy $strategy */
+        /** @var Codec $strategy */
         /** @var bool $inverted */
-        foreach ($this->strategies as list($strategy, $inverted)) {
+        foreach ($this->strategies as [$strategy, $inverted]) {
             $data = $inverted ? $strategy->decode($data) : $strategy->encode($data);
         }
         return $data;
@@ -35,19 +35,19 @@ class Chain implements EncodingStrategy
      */
     public function decode(string $data): string
     {
-        /** @var EncodingStrategy $strategy */
+        /** @var Codec $strategy */
         /** @var bool $inverted */
-        foreach (array_reverse($this->strategies) as list($strategy, $inverted)) {
+        foreach (array_reverse($this->strategies) as [$strategy, $inverted]) {
             $data = $inverted ? $strategy->encode($data) : $strategy->decode($data);
         }
         return $data;
     }
 
     /**
-     * @param EncodingStrategy $strategy
+     * @param Codec $strategy
      * @return Chain
      */
-    public function append(EncodingStrategy $strategy): static
+    public function append(Codec $strategy): static
     {
         $this->strategies[] = [$strategy, false];
         return $this;
@@ -57,10 +57,10 @@ class Chain implements EncodingStrategy
      * Inverted encoders behave the opposite as the chain.
      * In case the chain is encoded, the inverted encoder will decode and vice versa.
      *
-     * @param EncodingStrategy $strategy
+     * @param Codec $strategy
      * @return Chain
      */
-    public function appendInverted(EncodingStrategy $strategy): static
+    public function appendInverted(Codec $strategy): static
     {
         $this->strategies[] = [$strategy, true];
         return $this;

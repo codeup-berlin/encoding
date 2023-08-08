@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Codec;
 use Exception;
 use InvalidArgumentException;
 
-class AESGCM implements EncodingStrategy
+class AESGCM implements Codec
 {
     /**
      * @var string

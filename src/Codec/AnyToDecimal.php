@@ -2,24 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Alphabet;
+use Codeup\Encoding\Codec;
 use InvalidArgumentException;
 
-class Decimal implements EncodingStrategy
+class AnyToDecimal implements Codec
 {
     /**
-     * @param string|null $sourceDictionary
+     * @param string|null $sourceAlphabet
      */
     public function __construct(
-        private readonly ?string $sourceDictionary = null,
+        private readonly ?string $sourceAlphabet = null,
     ) {
-        if (null !== $sourceDictionary) {
-            $chars = $this->stringToArray($sourceDictionary);
+        if (null !== $sourceAlphabet) {
+            $chars = $this->stringToArray($sourceAlphabet);
             $charsUnique = array_unique($chars);
             if (count($chars) !== count($charsUnique)) {
-                throw new InvalidArgumentException("Ambiguous dictionary: $sourceDictionary");
+                throw new InvalidArgumentException("Ambiguous alphabet: $sourceAlphabet");
             }
         }
     }
@@ -31,28 +32,28 @@ class Decimal implements EncodingStrategy
      */
     public function decode(string $data): string
     {
-        $decValue = ltrim($data, '0');
-        $leadingZeros = str_repeat('0', strlen($data) - strlen($decValue));
+        $encodedValue = ltrim($data, '0');
+        $leadingZeros = str_repeat('0', strlen($data) - strlen($encodedValue));
 
-        if ('' === $decValue) {
+        if ('' === $encodedValue) {
             return $leadingZeros;
         }
 
-        $toDictionary = $this->sourceDictionary ?? self::BASE_HEX;
-        $toBaseChars = $this->stringToArray($toDictionary);
+        $toAlphabet = $this->sourceAlphabet ?? Alphabet::BASE_HEX->value;
+        $toBaseChars = $this->stringToArray($toAlphabet);
         $toBaseDivisor = (string)count($toBaseChars);
 
         $result = '';
         // while $decValue >= $toBaseDivisor
-        while (-1 < bccomp($decValue, $toBaseDivisor)) {
-            $toBaseIndex = bcmod($decValue, $toBaseDivisor);
+        while (-1 < bccomp($encodedValue, $toBaseDivisor)) {
+            $toBaseIndex = bcmod($encodedValue, $toBaseDivisor);
             $result = $toBaseChars[$toBaseIndex] . $result;
-            $decValue = bcdiv($decValue, $toBaseDivisor);
+            $encodedValue = bcdiv($encodedValue, $toBaseDivisor);
         }
-        $toBaseIndex = $decValue;
+        $toBaseIndex = $encodedValue;
         $result = $leadingZeros . $toBaseChars[$toBaseIndex] . $result;
 
-        if (null === $this->sourceDictionary) {
+        if (null === $this->sourceAlphabet) {
             return hex2bin($result);
         } else {
             return $result;
@@ -65,12 +66,12 @@ class Decimal implements EncodingStrategy
      */
     public function encode(string $data): string
     {
-        if (null === $this->sourceDictionary) {
+        if (null === $this->sourceAlphabet) {
             $value = bin2hex($data);
-            $fromDictionary = self::BASE_HEX;
+            $fromAlphabet = Alphabet::BASE_HEX->value;
         } else {
             $value = $data;
-            $fromDictionary = $this->sourceDictionary;
+            $fromAlphabet = $this->sourceAlphabet;
         }
 
         $trimmedValue = ltrim($value, '0');
@@ -80,7 +81,7 @@ class Decimal implements EncodingStrategy
             return $leadingZeros;
         }
 
-        $fromChars = $this->stringToArray($fromDictionary);
+        $fromChars = $this->stringToArray($fromAlphabet);
         $fromDivisor = count($fromChars);
 
         $valueChars = $this->stringToArray($trimmedValue);

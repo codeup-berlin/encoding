@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
-use Codeup\Encoding\Strategy as EncodingStrategy;
+use Codeup\Encoding\Codec;
 use InvalidArgumentException;
-use RuntimeException;
 use SodiumException;
 
-class Base64Url implements EncodingStrategy
+class BinToBase64Url implements Codec
 {
     /**
      * @param string $data
@@ -20,7 +19,7 @@ class Base64Url implements EncodingStrategy
         try {
             return sodium_bin2base64($data, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         } catch (SodiumException $e) {
-            throw new RuntimeException("Base64Url encoding failed: {$e->getMessage()}", 0, $e);
+            throw new InvalidArgumentException("BinToBase64Url encoding failed: {$e->getMessage()}", 0, $e);
         }
     }
 
@@ -34,7 +33,7 @@ class Base64Url implements EncodingStrategy
         try {
             return sodium_base642bin($data, SODIUM_BASE64_VARIANT_URLSAFE_NO_PADDING);
         } catch (SodiumException $e) {
-            throw new InvalidArgumentException("Base64Url encoding failed: {$e->getMessage()}", 0, $e);
+            throw new InvalidArgumentException("BinToBase64Url encoding failed: {$e->getMessage()}", 0, $e);
         }
     }
 }

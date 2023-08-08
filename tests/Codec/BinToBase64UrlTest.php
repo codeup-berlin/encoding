@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
 use PHPUnit\Framework\TestCase;
 
-class Base64UrlTest extends TestCase
+class BinToBase64UrlTest extends TestCase
 {
     /**
      * @test
@@ -17,7 +17,7 @@ class Base64UrlTest extends TestCase
         $base64encodedData = 'd+W/tA==';
         $base64UrlDecodedData = base64_decode($base64encodedData);
         $expectedData = 'd-W_tA';
-        $classUnderTest = new Base64Url();
+        $classUnderTest = new BinToBase64Url();
 
         // test
         $result = $classUnderTest->encode($base64UrlDecodedData);
@@ -35,7 +35,7 @@ class Base64UrlTest extends TestCase
         $base64encodedData = 'd+W/tA==';
         $base64UrlEncodedData = 'd-W_tA';
         $expectedData = base64_decode($base64encodedData);
-        $classUnderTest = new Base64Url();
+        $classUnderTest = new BinToBase64Url();
 
         // test
         $result = $classUnderTest->decode($base64UrlEncodedData);

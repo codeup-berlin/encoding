@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class HexTest extends TestCase
+class BinToHexTest extends TestCase
 {
     /**
      * @return string[][]
      */
-    public function provideValidCases(): array
+    public static function provideValidCases(): array
     {
         return [
             'small value' => ['bla', '626c61'],
@@ -31,7 +31,7 @@ class HexTest extends TestCase
      */
     public function encode_validString(string $plainValue, string $encodedValue)
     {
-        $classUnderTest = new Hex();
+        $classUnderTest = new BinToHex();
         $result = $classUnderTest->encode($plainValue);
         $this->assertSame($encodedValue, $result);
     }
@@ -44,7 +44,7 @@ class HexTest extends TestCase
      */
     public function decode_validString(string $plainValue, string $encodedValue)
     {
-        $classUnderTest = new Hex();
+        $classUnderTest = new BinToHex();
         $result = $classUnderTest->decode($encodedValue);
         $this->assertSame($plainValue, $result);
     }
@@ -55,7 +55,7 @@ class HexTest extends TestCase
     public function decode_invalidString()
     {
         $this->expectException(InvalidArgumentException::class);
-        $classUnderTest = new Hex();
+        $classUnderTest = new BinToHex();
         @$classUnderTest->decode('626c6');
     }
 }

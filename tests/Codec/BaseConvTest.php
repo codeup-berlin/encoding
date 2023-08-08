@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
 use PHPUnit\Framework\TestCase;
 
@@ -11,7 +11,7 @@ class BaseConvTest extends TestCase
     /**
      * @return array
      */
-    public function provideValidCases(): array
+    public static function provideValidCases(): array
     {
         return [
             'from binary to binary' => [
@@ -22,7 +22,7 @@ class BaseConvTest extends TestCase
                 hex2bin('580a7aa5d6610ac3'), null, '0123456789abcdef',
                 '580a7aa5d6610ac3'
             ],
-            'from binary to password dictionary' => [
+            'from binary to password alphabet' => [
                 hex2bin('580a7aa5d6610ac3'), null, '0123456789ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!^"§$%&/()=?*\'_:;,.-#+',
                 'VeUqZ;+a.J'
             ],

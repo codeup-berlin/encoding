@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;

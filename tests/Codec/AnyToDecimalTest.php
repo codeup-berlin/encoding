@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Strategy;
+namespace Codeup\Encoding\Codec;
 
 use PHPUnit\Framework\TestCase;
 
-class DecimalTest extends TestCase
+class AnyToDecimalTest extends TestCase
 {
     /**
      * @return array
      */
-    public function provideValidCases(): array
+    public static function provideValidCases(): array
     {
         return [
             'octal (base8) - 7' => [
@@ -23,7 +23,7 @@ class DecimalTest extends TestCase
             'octal (base8)' => [
                 '173', '01234567', '123'
             ],
-            'undecimal (base11) using "Christo" as dictionary' => [
+            'undecimal (base11) using "Christo" as alphabet' => [
                 'rhtitiCtrohhisshhCssCotthitsoitC', 'Christo', '355927353784509896715106760'
             ],
             'hex (base16) - small number' => [
@@ -63,12 +63,12 @@ class DecimalTest extends TestCase
      * @test
      * @dataProvider provideValidCases
      * @param string $baseValue
-     * @param string|null $dictionary
+     * @param string|null $alphabet
      * @param string $expectedDecimalValue
      */
-    public function encode_valid(string $baseValue, ?string $dictionary, string $expectedDecimalValue)
+    public function encode_valid(string $baseValue, ?string $alphabet, string $expectedDecimalValue)
     {
-        $classUnderTest = new Decimal($dictionary);
+        $classUnderTest = new AnyToDecimal($alphabet);
         $result = $classUnderTest->encode($baseValue);
         $this->assertSame($expectedDecimalValue, $result);
     }
@@ -76,13 +76,10 @@ class DecimalTest extends TestCase
     /**
      * @test
      * @dataProvider provideValidCases
-     * @param string $expectedBaseValue
-     * @param string|null $dictionary
-     * @param string $decimalValue
      */
-    public function decode_valid(string $expectedBaseValue, ?string $dictionary, string $decimalValue)
+    public function decode_valid(string $expectedBaseValue, ?string $alphabet, string $decimalValue)
     {
-        $classUnderTest = new Decimal($dictionary);
+        $classUnderTest = new AnyToDecimal($alphabet);
         $result = $classUnderTest->decode($decimalValue);
         $this->assertSame($expectedBaseValue, $result);
     }
@@ -90,7 +87,7 @@ class DecimalTest extends TestCase
     /**
      * @return array
      */
-    public function provideLeadingZeroCases(): array
+    public static function provideLeadingZeroCases(): array
     {
         return [
             'hex (base16)' => [
@@ -118,13 +115,13 @@ class DecimalTest extends TestCase
      * @test
      * @dataProvider provideLeadingZeroCases
      * @param string $baseValue
-     * @param string|null $dictionary
+     * @param string|null $alphabet
      */
     public function encodeDecode_leadingZero(
         string $baseValue,
-        ?string $dictionary,
+        ?string $alphabet,
     ) {
-        $classUnderTest = new Decimal($dictionary);
+        $classUnderTest = new AnyToDecimal($alphabet);
         $encoded = $classUnderTest->encode($baseValue);
         $decoded = $classUnderTest->decode($encoded);
         $this->assertSame($baseValue, $decoded);
@@ -133,7 +130,7 @@ class DecimalTest extends TestCase
     /**
      * @return array
      */
-    public function provideEdgeCases(): array
+    public static function provideEdgeCases(): array
     {
         return [
             '0 > hex 0' => ['0', '0123456789abcdef'],
@@ -155,9 +152,9 @@ class DecimalTest extends TestCase
      * @test
      * @dataProvider provideEdgeCases
      */
-    public function decodeEncode_edgeCase(string $decimalValue, string $dictionary)
+    public function decodeEncode_edgeCase(string $decimalValue, string $alphabet)
     {
-        $classUnderTest = new Decimal($dictionary);
+        $classUnderTest = new AnyToDecimal($alphabet);
 
         $hexValue = $classUnderTest->decode($decimalValue);
         $encoded = $classUnderTest->encode($hexValue);
