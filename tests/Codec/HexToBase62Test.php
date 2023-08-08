@@ -37,4 +37,32 @@ class HexToBase62Test extends TestCase
         $classUnderTest = new HexToBase62();
         $classUnderTest->encode('amazing example');
     }
+
+    /**
+     * @test
+     */
+    public function decode_valid()
+    {
+        // prepare
+        $plain = uniqid('amazing example');
+        $base62 = Base62::getEncoder()->encode($plain);
+        $hex = bin2hex($plain);
+        $classUnderTest = new HexToBase62();
+
+        // test
+        $result = $classUnderTest->decode($base62);
+
+        // verify
+        $this->assertSame($hex, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function decode_invalid()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $classUnderTest = new HexToBase62();
+        $classUnderTest->decode('amazing example');
+    }
 }

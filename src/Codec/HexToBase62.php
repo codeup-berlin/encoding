@@ -45,6 +45,10 @@ class HexToBase62 implements EncodingStrategy
         if ('' === $data) {
             return '';
         }
-        return $this->gmpBaseConvert($data, 62, 16);
+        $result = $this->gmpBaseConvert($data, 62, 16);
+        if (false === hex2bin($result)) {
+            throw new InvalidArgumentException('Invalid hex string result.');
+        }
+        return $result;
     }
 }
