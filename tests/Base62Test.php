@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Codeup\Encoding;
 
 use Codeup\Encoding\Codec\Chain\UuidToBase62;
-use Codeup\Encoding\Codec\IntegerToBase62;
+use Codeup\Encoding\Codec\Gmp\IntegerToBase62;
 use Codeup\Encoding\Codec\StringToBase62;
 use PHPUnit\Framework\TestCase;
 

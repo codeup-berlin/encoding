@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Codec;
+namespace Codeup\Encoding\Codec\Gmp;
 
 use Codeup\Encoding\Base62;
 use InvalidArgumentException;
@@ -13,12 +13,12 @@ class HexToBase62Test extends TestCase
     /**
      * @test
      */
-    public function encode_valid()
+    public function encode_hex()
     {
         // prepare
-        $plain = uniqid('amazing example');
-        $base62 = Base62::getEncoder()->encode($plain);
-        $hex = bin2hex($plain);
+        $bin = uniqid('amazing example');
+        $base62 = Base62::getEncoder()->encode($bin);
+        $hex = bin2hex($bin);
         $classUnderTest = new HexToBase62();
 
         // test
@@ -31,22 +31,22 @@ class HexToBase62Test extends TestCase
     /**
      * @test
      */
-    public function encode_invalid()
+    public function encode_nonHex()
     {
         $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new HexToBase62();
-        $classUnderTest->encode('amazing example');
+        $classUnderTest->encode('this contains non-hex characters');
     }
 
     /**
      * @test
      */
-    public function decode_valid()
+    public function decode_base62encodedHex()
     {
         // prepare
-        $plain = uniqid('amazing example');
-        $base62 = Base62::getEncoder()->encode($plain);
-        $hex = bin2hex($plain);
+        $bin = uniqid('amazing example');
+        $base62 = Base62::getEncoder()->encode($bin);
+        $hex = bin2hex($bin);
         $classUnderTest = new HexToBase62();
 
         // test
@@ -63,6 +63,6 @@ class HexToBase62Test extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new HexToBase62();
-        $classUnderTest->decode('amazing example');
+        $classUnderTest->decode('this contains non-base62 characters');
     }
 }

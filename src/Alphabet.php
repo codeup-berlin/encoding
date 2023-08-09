@@ -22,4 +22,18 @@ enum Alphabet: string
     const BASE16 = self::BASE16_LOWER;
     const BASE_HEX = self::BASE16;
     const BASE62 = self::BASE62_GMP;
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public function isValidString(string $value): bool
+    {
+        return match($this) {
+            self::BASE10 => ctype_digit($value),
+            self::BASE16_RFC4648 => ctype_xdigit($value) && ctype_upper($value),
+            self::BASE16_LOWER => ctype_xdigit($value) && ctype_lower($value),
+            self::BASE62_GMP, self::BASE62_BASEX, self::BASE62_BASE64SUBSET => ctype_alnum($value),
+        };
+    }
 }

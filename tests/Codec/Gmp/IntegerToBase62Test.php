@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Codeup\Encoding\Codec;
+namespace Codeup\Encoding\Codec\Gmp;
 
 use PHPUnit\Framework\TestCase;
 

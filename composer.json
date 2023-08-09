@@ -17,6 +17,7 @@
   "require": {
     "php": "^8.2",
     "ext-bcmath": "*",
+    "ext-ctype": "*",
     "ext-gmp": "*",
     "ext-sodium": "*",
     "spomky-labs/php-aes-gcm": "^1.2"

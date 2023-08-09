@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding\Codec;
 
+use Codeup\Encoding\Codec\Gmp\HexToBase62;
 use InvalidArgumentException;
 
 class StringToBase62 extends HexToBase62

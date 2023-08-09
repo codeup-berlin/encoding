@@ -6,7 +6,7 @@ namespace Codeup\Encoding\Compact;
 
 use Codeup\Encoding\Codec;
 use Codeup\Encoding\Codec\Chain\UuidToBase62;
-use Codeup\Encoding\Codec\IntegerToBase62;
+use Codeup\Encoding\Codec\Gmp\IntegerToBase62;
 use Codeup\Encoding\Codec\StringToBase62;
 use Codeup\Encoding\Compact;
 
