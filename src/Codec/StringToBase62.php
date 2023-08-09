@@ -6,6 +6,7 @@ namespace Codeup\Encoding\Codec;
 
 use Codeup\Encoding\Codec\Gmp\HexToBase62;
 use InvalidArgumentException;
+use Throwable;
 
 class StringToBase62 extends HexToBase62
 {
@@ -25,10 +26,14 @@ class StringToBase62 extends HexToBase62
      */
     public function decode(string $data): string
     {
-        $decoded = hex2bin(parent::decode($data));
-        if (false === $decoded) {
-            throw new InvalidArgumentException('Decoding failed. Inner hex not valid.');
+        try {
+            return sodium_hex2bin(parent::decode($data));
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException(
+                'Decoding failed. Inner hex not valid. ' . $e->getMessage(),
+                0,
+                $e,
+            );
         }
-        return $decoded;
     }
 }

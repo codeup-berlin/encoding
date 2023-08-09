@@ -6,6 +6,8 @@ namespace Codeup\Encoding\Codec;
 
 use Codeup\Encoding\Codec;
 use InvalidArgumentException;
+use SodiumException;
+use Throwable;
 
 class BinToHex implements Codec
 {
@@ -15,7 +17,11 @@ class BinToHex implements Codec
      */
     public function encode(string $data): string
     {
-        return bin2hex($data);
+        try {
+            return sodium_bin2hex($data);
+        } catch (Throwable $e) {
+            throw new InvalidArgumentException('Invalid bin string. ' . $e->getMessage());
+        }
     }
 
     /**
@@ -25,10 +31,10 @@ class BinToHex implements Codec
      */
     public function decode(string $data): string
     {
-        $result = hex2bin($data);
-        if (false === $result) {
-            throw new InvalidArgumentException('Invalid hex string.');
+        try {
+            return sodium_hex2bin($data);
+        } catch (SodiumException $e) {
+            throw new InvalidArgumentException('Invalid hex string. ' . $e->getMessage());
         }
-        return $result;
     }
 }

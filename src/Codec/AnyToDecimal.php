@@ -8,14 +8,16 @@ use Codeup\Encoding\Alphabet;
 use Codeup\Encoding\Codec;
 use InvalidArgumentException;
 
-class AnyToDecimal implements Codec
+/**
+ * @see https://www.php.net/manual/en/function.base-convert.php
+ */
+readonly class AnyToDecimal implements Codec
 {
     /**
      * @param string|null $sourceAlphabet
      */
-    public function __construct(
-        private readonly ?string $sourceAlphabet = null,
-    ) {
+    public function __construct(private ?string $sourceAlphabet = null)
+    {
         if (null !== $sourceAlphabet) {
             $chars = $this->stringToArray($sourceAlphabet);
             $charsUnique = array_unique($chars);
@@ -39,7 +41,7 @@ class AnyToDecimal implements Codec
             return $leadingZeros;
         }
 
-        $toAlphabet = $this->sourceAlphabet ?? Alphabet::BASE_HEX->value;
+        $toAlphabet = $this->sourceAlphabet ?? Alphabet::HEX->value;
         $toBaseChars = $this->stringToArray($toAlphabet);
         $toBaseDivisor = (string)count($toBaseChars);
 
@@ -54,7 +56,7 @@ class AnyToDecimal implements Codec
         $result = $leadingZeros . $toBaseChars[$toBaseIndex] . $result;
 
         if (null === $this->sourceAlphabet) {
-            return hex2bin($result);
+            return sodium_hex2bin($result);
         } else {
             return $result;
         }
@@ -67,8 +69,8 @@ class AnyToDecimal implements Codec
     public function encode(string $data): string
     {
         if (null === $this->sourceAlphabet) {
-            $value = bin2hex($data);
-            $fromAlphabet = Alphabet::BASE_HEX->value;
+            $value = sodium_bin2hex($data);
+            $fromAlphabet = Alphabet::HEX->value;
         } else {
             $value = $data;
             $fromAlphabet = $this->sourceAlphabet;

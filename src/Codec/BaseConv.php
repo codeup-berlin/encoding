@@ -5,98 +5,59 @@ declare(strict_types=1);
 namespace Codeup\Encoding\Codec;
 
 use Codeup\Encoding\Alphabet;
-use Codeup\Encoding\Codec;
 
-/**
- * @see https://www.php.net/manual/en/function.base-convert.php
- */
-class BaseConv implements Codec
+class BaseConv extends Chain
 {
     /**
-     * @var array<string, AnyToDecimal>
+     * @param string $sourceAlphabetValue
+     * @param string $targetAlphabetValue
      */
-    private static array $decimalEncoder = [];
-
-        /**
-     * @var string|null
-     */
-    private ?string $sourceAlphabet;
-
-    /**
-     * @var string|null
-     */
-    private ?string $targetAlphabet;
-
-    /**
-     * @param string|null $fromBase
-     * @param string|null $toBase
-     */
-    public function __construct(?string $fromBase = null, ?string $toBase = null)
+    public function __construct(string $sourceAlphabetValue, string $targetAlphabetValue)
     {
-        $this->sourceAlphabet = $fromBase;
-        $this->targetAlphabet = $toBase;
-        if (null !== $this->sourceAlphabet && !isset(self::$decimalEncoder[$this->sourceAlphabet])) {
-            self::$decimalEncoder[$this->sourceAlphabet] = new AnyToDecimal($this->sourceAlphabet);
-        }
-        if (null !== $this->targetAlphabet && !isset(self::$decimalEncoder[$this->targetAlphabet])) {
-            self::$decimalEncoder[$this->targetAlphabet] = new AnyToDecimal($this->targetAlphabet);
-        }
-        if ((null === $this->sourceAlphabet || null === $this->targetAlphabet) &&
-            !isset(self::$decimalEncoder[Alphabet::BASE_HEX->value])
-        ) {
-            self::$decimalEncoder[Alphabet::BASE_HEX->value] = new AnyToDecimal(Alphabet::BASE_HEX->value);
+        if ($sourceAlphabetValue !== $targetAlphabetValue) {
+            if (Alphabet::BINARY->value === $sourceAlphabetValue) {
+                // bin -> hex -> dec -> target
+                $this->append(new BinToHex());
+                $this->append(new AnyToDecimal(Alphabet::HEX->value));
+                $this->appendInverted(new AnyToDecimal($targetAlphabetValue));
+            } elseif (Alphabet::BINARY->value === $targetAlphabetValue) {
+                // source -> dec -> hex -> bin
+                $this->append(new AnyToDecimal($sourceAlphabetValue));
+                $this->appendInverted(new AnyToDecimal(Alphabet::HEX->value));
+                $this->appendInverted(new BinToHex());
+            } else {
+                // source -> dec -> target
+                $this->append(new AnyToDecimal($sourceAlphabetValue));
+                $this->appendInverted(new AnyToDecimal($targetAlphabetValue));
+            }
         }
     }
 
     /**
-     * @see https://www.php.net/manual/en/function.base-convert.php
-     * @param string $value
-     * @param string $fromAlphabet
-     * @param string $toAlphabet
-     * @return string
+     * @param Alphabet $sourceAlphabet
+     * @param Alphabet $targetAlphabet
+     * @return self
      */
-    private function convBase(string $value, string $fromAlphabet, string $toAlphabet): string
+    public static function makeAnyToAny(Alphabet $sourceAlphabet, Alphabet $targetAlphabet): self
     {
-        $decimalValue = self::$decimalEncoder[$fromAlphabet]->encode($value);
-        return self::$decimalEncoder[$toAlphabet]->decode($decimalValue);
+        return new self($sourceAlphabet->value, $targetAlphabet->value);
     }
 
     /**
-     * @param string $data
-     * @param string|null $fromBase
-     * @param string|null $toBase
-     * @return false|string
+     * @param Alphabet $sourceAlphabet
+     * @return self
      */
-    private function encodeNormalized(string $data, ?string $fromBase, ?string $toBase)
+    public static function makeAnyToBin(Alphabet $sourceAlphabet): self
     {
-        if (null === $fromBase) {
-            $data = bin2hex($data);
-            $fromBase = Alphabet::BASE_HEX->value;
-        }
-        if (null === $toBase) {
-            $toBase = Alphabet::BASE_HEX->value;
-            $result = $this->convBase($data, $fromBase, $toBase);
-            return hex2bin($result);
-        } else {
-            return $this->convBase($data, $fromBase, $toBase);
-        }
+        return new self($sourceAlphabet->value, Alphabet::BINARY->value);
     }
 
     /**
-     * @param string $data
-     * @return string
+     * @param Alphabet $targetAlphabet
+     * @return self
      */
-    public function encode(string $data): string
+    public static function makeBinToAny(Alphabet $targetAlphabet): self
     {
-        return $this->encodeNormalized($data, $this->sourceAlphabet, $this->targetAlphabet);
-    }
-
-    /**
-     * @param string $data
-     * @return string
-     */
-    public function decode(string $data): string
-    {
-        return $this->encodeNormalized($data, $this->targetAlphabet, $this->sourceAlphabet);
+        return new self(Alphabet::BINARY->value, $targetAlphabet->value);
     }
 }
