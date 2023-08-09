@@ -6,9 +6,6 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding;
 
-/**
- * @internal
- */
 enum Alphabet: string
 {
     case BASE10 = '0123456789';
