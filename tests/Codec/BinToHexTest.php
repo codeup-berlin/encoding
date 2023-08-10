@@ -56,6 +56,16 @@ class BinToHexTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $classUnderTest = new BinToHex();
-        @$classUnderTest->decode('626c6');
+        $classUnderTest->decode('626c6');
+    }
+
+    /**
+     * @test
+     */
+    public function decode_upperCase()
+    {
+        $classUnderTest = new BinToHex();
+        $encoded = $classUnderTest->decode('626C61');
+        $this->assertSame('bla', $encoded);
     }
 }

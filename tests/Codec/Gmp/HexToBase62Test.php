@@ -80,6 +80,10 @@ class HexToBase62Test extends TestCase
                 '0007a456e7b5a5eb059e721fb431436883143101275c4077f83fe70298f5623d',
                 '7a456e7b5a5eb059e721fb431436883143101275c4077f83fe70298f5623d',
             ],
+            'upper case' => [
+                '7A45',
+                '7a45',
+            ],
         ];
     }
 

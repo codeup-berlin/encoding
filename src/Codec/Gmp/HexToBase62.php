@@ -30,6 +30,7 @@ class HexToBase62 implements EncodingStrategy
         if ('' === $data) {
             return '';
         }
+        $data = mb_strtolower($data);
         $this->assertValidHexString($data);
         return $this->gmpBaseConvert($data, 16, 62);
     }

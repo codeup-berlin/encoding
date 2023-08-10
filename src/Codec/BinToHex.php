@@ -18,7 +18,7 @@ class BinToHex implements Codec
     public function encode(string $data): string
     {
         try {
-            return sodium_bin2hex($data);
+            return mb_strtolower(sodium_bin2hex($data));
         } catch (Throwable $e) {
             throw new InvalidArgumentException('Invalid bin string. ' . $e->getMessage());
         }
