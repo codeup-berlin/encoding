@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Codeup\Encoding;
 
+use Codeup\Encoding\Codec\Chain\Sha256ToBase62;
 use Codeup\Encoding\Codec\Chain\UuidToBase62;
 use Codeup\Encoding\Codec\Gmp\IntegerToBase62;
 use Codeup\Encoding\Codec\StringToBase62;
@@ -73,6 +74,22 @@ class Base62
     public static function getUuidDecoder(): Decoder
     {
         return self::makeOrGetInstance(UuidToBase62::class);
+    }
+
+    /**
+     * @return Encoder
+     */
+    public static function getSha256Encoder(): Encoder
+    {
+        return self::makeOrGetInstance(Sha256ToBase62::class);
+    }
+
+    /**
+     * @return Decoder
+     */
+    public static function getSha256Decoder(): Decoder
+    {
+        return self::makeOrGetInstance(Sha256ToBase62::class);
     }
 
     /**
