@@ -15,6 +15,7 @@ class StripUuid implements Codec
      */
     public function encode(string $data): string
     {
+        $data = mb_strtolower($data);
         if (!preg_match('/^[a-f0-9]{8}-([a-f0-9]{4}-){3}[a-f0-9]{12}$/', $data)) {
             throw new InvalidArgumentException('Not a valid uuid: ' . $data);
         }

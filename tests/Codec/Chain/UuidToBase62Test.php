@@ -12,29 +12,59 @@ class UuidToBase62Test extends TestCase
     /**
      * @return array
      */
-    public static function provideValidRoundtripCases(): array
+    public static function provideUuids(): array
     {
         return [
-            'uuid' => ['364f1e0d-a2ca-4e83-8139-26b058df27fe'],
-            'uuid leading zero' => ['064f1e0d-a2ca-4e83-8139-26b058df27fe'],
-            'uuid nil' => ['00000000-0000-0000-0000-000000000000'],
-            'uuid min' => ['10000000-0000-0000-0000-000000000000'],
-            'uuid max' => ['ffffffff-ffff-ffff-ffff-ffffffffffff'],
+            'lower case' => [
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+                '1eTk1odgiy5V3cQwAfUZhe',
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+            ],
+            'upper case' => [
+                '364F1E0D-A2CA-4E83-8139-26B058DF27FE',
+                '1eTk1odgiy5V3cQwAfUZhe',
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+            ],
+            'leading zero' => [
+                '004f1e0d-a2ca-4e83-8139-26b058df27f8',
+                'a9iY6w2NfRcMjuZr2Yjg',
+                '004f1e0d-a2ca-4e83-8139-26b058df27f8',
+            ],
+            'tailing zero' => [
+                'f04f1e0d-a2ca-4e83-8139-26b058df2700',
+                '7JSJXjZOQKCa12w1f1iPBY',
+                'f04f1e0d-a2ca-4e83-8139-26b058df2700',
+            ],
+            'nil' => [
+                '00000000-0000-0000-0000-000000000000',
+                '0',
+                '00000000-0000-0000-0000-000000000000',
+            ],
+            'min' => [
+                '10000000-0000-0000-0000-000000000000',
+                'UBsO4td5jEbl6wfnwZr6G',
+                '10000000-0000-0000-0000-000000000000',
+            ],
+            'max' => [
+                'ffffffff-ffff-ffff-ffff-ffffffffffff',
+                '7n42DGM5Tflk9n8mt7Fhc7',
+                'ffffffff-ffff-ffff-ffff-ffffffffffff',
+            ],
         ];
     }
 
     /**
      * @test
-     * @dataProvider provideValidRoundtripCases
+     * @dataProvider provideUuids
      */
-    public function roundtrip_edgeCase(string $value)
+    public function encodeDecode_uuid(string $uuid, string $expectedEncoded, string $expectedDecoded)
     {
         $classUnderTest = new UuidToBase62();
-
-        $encoded = $classUnderTest->encode($value);
+        $encoded = $classUnderTest->encode($uuid);
         $decoded = $classUnderTest->decode($encoded);
-
-        $this->assertSame($value, $decoded);
+        $this->assertSame($expectedEncoded, $encoded);
+        $this->assertSame(mb_strtolower($uuid), mb_strtolower($decoded));
+        $this->assertSame($expectedDecoded, $decoded);
     }
 
     /**

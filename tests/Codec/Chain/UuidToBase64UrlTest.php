@@ -114,28 +114,60 @@ class UuidToBase64UrlTest extends TestCase
     }
 
     /**
-     * @test
+     * @return array
      */
-    public function roundtrip_uuidWithLeadingZero()
+    public static function provideUuids(): array
     {
-        $classUnderTest = new UuidToBase64Url();
-        $uuid = '004f1e0d-a2ca-4e83-8139-26b058df27f0';
-        $encoded = $classUnderTest->encode($uuid);
-        $decoded = $classUnderTest->decode($encoded);
-        $this->assertSame('AE8eDaLKToOBOSawWN8n8A', $encoded);
-        $this->assertSame($uuid, $decoded);
+        return [
+            'lower case' => [
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+                'Nk8eDaLKToOBOSawWN8n_g',
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+            ],
+            'upper case' => [
+                '364F1E0D-A2CA-4E83-8139-26B058DF27FE',
+                'Nk8eDaLKToOBOSawWN8n_g',
+                '364f1e0d-a2ca-4e83-8139-26b058df27fe',
+            ],
+            'leading zero' => [
+                '004f1e0d-a2ca-4e83-8139-26b058df27f8',
+                'AE8eDaLKToOBOSawWN8n-A',
+                '004f1e0d-a2ca-4e83-8139-26b058df27f8',
+            ],
+            'tailing zero' => [
+                'f04f1e0d-a2ca-4e83-8139-26b058df2700',
+                '8E8eDaLKToOBOSawWN8nAA',
+                'f04f1e0d-a2ca-4e83-8139-26b058df2700',
+            ],
+            'nil' => [
+                '00000000-0000-0000-0000-000000000000',
+                'AAAAAAAAAAAAAAAAAAAAAA',
+                '00000000-0000-0000-0000-000000000000',
+            ],
+            'min' => [
+                '10000000-0000-0000-0000-000000000000',
+                'EAAAAAAAAAAAAAAAAAAAAA',
+                '10000000-0000-0000-0000-000000000000',
+            ],
+            'max' => [
+                'ffffffff-ffff-ffff-ffff-ffffffffffff',
+                '_____________________w',
+                'ffffffff-ffff-ffff-ffff-ffffffffffff',
+            ],
+        ];
     }
 
     /**
      * @test
+     * @dataProvider provideUuids
      */
-    public function roundtrip_nilUuid()
+    public function encodeDecode_uuid(string $uuid, string $expectedEncoded, string $expectedDecoded)
     {
         $classUnderTest = new UuidToBase64Url();
-        $uuid = '00000000-0000-0000-0000-000000000000';
         $encoded = $classUnderTest->encode($uuid);
         $decoded = $classUnderTest->decode($encoded);
-        $this->assertSame('AAAAAAAAAAAAAAAAAAAAAA', $encoded);
-        $this->assertSame($uuid, $decoded);
+        $this->assertSame($expectedEncoded, $encoded);
+        $this->assertSame(mb_strtolower($uuid), mb_strtolower($decoded));
+        $this->assertSame($expectedDecoded, $decoded);
     }
 }
